@@ -1,14 +1,12 @@
 #include <iostream>
+#include <monster.h>
 
-void prout()
-{
-	int b = 0;
-}
+
 
 int main()
 {
-    int a = 3;
-	a += 4;
+	Monster monster;
+	monster.init();
     //std::cout << "Hello World\n";
     return EXIT_SUCCESS;
 }

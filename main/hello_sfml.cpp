@@ -6,8 +6,15 @@
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "My window");
+    sf::RenderWindow window(sf::VideoMode(900, 900), "WT Window");
+	sf::Sprite spriteTest;
+	sf::Texture textureTest;
 
+	if (!textureTest.loadFromFile("data/pokemon.png"))
+	{
+		return EXIT_FAILURE;
+	}
+	spriteTest.setTexture(textureTest);
     // run the program as long as the window is open
     while (window.isOpen())
     {
@@ -16,11 +23,12 @@ int main()
         while (window.pollEvent(event))
         {
             // "close requested" event: we close the window
-            if (event.type == sf::Event::Closed)
+            if ((event.type == sf::Event::KeyPressed) || (event.type == sf::Event::Closed))
                 window.close();
         }
 
-		window.clear(sf::Color::Black);
+		window.clear(sf::Color::Blue);
+		window.draw(spriteTest);
 		window.display();
     }
     return EXIT_SUCCESS;
