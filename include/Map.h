@@ -9,7 +9,7 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include "Const.h"
+#include "Constant.h"
 #include "Vector2D.h"
 
 struct Vector2D;

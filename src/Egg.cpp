@@ -13,7 +13,7 @@
 #include "GameObject.h"
 #include "Simulation.h"
 #include "Vector2D.h"
-#include "Const.h"
+#include "Constant.h"
 #include "Egg.h"
 
 struct Vector2D;

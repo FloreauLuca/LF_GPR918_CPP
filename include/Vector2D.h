@@ -3,13 +3,8 @@
 #define VECTOR2D_H
 
 struct Vector2D {
-	Vector2D(int x, int y) :x(x), y(y) {
-
-  	}
-	Vector2D() {
-		x = 0;
-		y = 0;
-	}
+	Vector2D(int x, int y);
+	Vector2D();
 	int x;
 	int y;
 };
