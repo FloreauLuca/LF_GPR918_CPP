@@ -1,4 +1,4 @@
-#include "pch.h"
+
 #include "Egg.h"
 
 #ifndef GAMEOBJECTBUILDER_H
