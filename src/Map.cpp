@@ -3,24 +3,20 @@
 #include <string>
 #include <iostream>
 #include <memory>
-#include <random>
 #include <list>
 #include <typeinfo>
 
 #include"GameObjectBuilder.h"
 #include "Map.h"
 #include "Creature.h"
-#include "Food.h"
 #include "GameObject.h"
 #include "Simulation.h"
 #include "Vector2D.h"
-#include "Egg.h"
 
 struct Vector2D;
 class Map;
 class Simulation;
 class Creature;
-class Food;
 class GameObject;
 class GameObjectBuilder;
 

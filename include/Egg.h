@@ -1,41 +1,29 @@
 
-#include <array>
-#include <string>
-#include <iostream>
-#include <memory>
-#include <random>
-#include <list>
-
 #ifndef OEUF_H
 #define OEUF_H
 
 #include "GameObject.h"
 
-struct Vector2D;
-
 class Map;
 class Simulation;
-class Creature;
-class Food;
 class GameObject;
-class GameObjectBuilder;
 
 class Egg : public GameObject
 {
 public:
-	Egg(Simulation * simulation);
+	Egg(Simulation * simulation); // initialise l'oeuf avec un pourcentage d'eclosion null
 
-	void update();
+	void update(); // verifie si il est detruit, eclos si hunger > 3 sinon augmente pourcentage eclosion
 
-	char getImage();
+	char getImage(); // image O
 
 private:
 
-	int hatchingPourcent;
+	int hatchingPourcent; // pourcentage d'eclosion
 	
-	void hatching();
+	void hatching(); // eclosion
 
-	void incrementHatching();
+	void incrementHatching(); // augmente le pourcentage d'eclosion
 
 };
 

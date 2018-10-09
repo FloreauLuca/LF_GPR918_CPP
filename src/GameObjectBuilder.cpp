@@ -1,11 +1,5 @@
 
-#include <array>
-#include <string>
-#include <iostream>
 #include <memory>
-#include <random>
-#include <list>
-
 
 #include"GameObjectBuilder.h"
 #include "Map.h"
@@ -15,10 +9,10 @@
 #include "Simulation.h"
 #include "Vector2D.h"
 #include "Egg.h"
+#include "Constant.h"
 
 struct Vector2D;
 
-class Map;
 class Simulation;
 class Creature;
 class Food;

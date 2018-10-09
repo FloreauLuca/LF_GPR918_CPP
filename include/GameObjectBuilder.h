@@ -1,16 +1,17 @@
 
-#include "Egg.h"
 
 #ifndef GAMEOBJECTBUILDER_H
 #define GAMEOBJECTBUILDER_H
 
+#include "Egg.h"
+
 struct Vector2D;
 
-class Map;
 class Simulation;
 class Creature;
 class Food;
 class GameObject;
+class Egg;
 
 
 class  GameObjectBuilder {

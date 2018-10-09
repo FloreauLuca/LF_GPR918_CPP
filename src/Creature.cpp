@@ -1,10 +1,6 @@
 
-#include <array>
-#include <string>
-#include <iostream>
 #include <memory>
 #include <random>
-#include <list>
 
 #include"GameObjectBuilder.h"
 #include "Map.h"
@@ -14,7 +10,6 @@
 #include "Simulation.h"
 #include "Vector2D.h"
 #include "Constant.h"
-#include "Egg.h"
 
 struct Vector2D;
 
@@ -61,8 +56,8 @@ void Creature::update() {
 		if (!gameObject.isObjectDestroyed() && gameObjectNotParent(&gameObject)) //()
 		{
 			simulation->map.AddGameObjectAt(std::shared_ptr<GameObject>(std::static_pointer_cast<GameObject>(GameObjectBuilder::buildEgg(*simulation))));
-			simulation->parent.push_back(&gameObject);
-			simulation->parent.push_back(this);
+			simulation->parentThisTurn.push_back(&gameObject);
+			simulation->parentThisTurn.push_back(this);
 		}
 	}
 }
@@ -137,7 +132,7 @@ Vector2D Creature::findNullPosition() {
 
 bool Creature::gameObjectNotParent(GameObject * gameObject)
 {
-	for (auto & parent : simulation->parent)
+	for (auto & parent : simulation->parentThisTurn)
 	{
 		if (gameObject == parent)
 		{

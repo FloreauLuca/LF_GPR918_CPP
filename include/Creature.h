@@ -1,55 +1,42 @@
 
-#include <array>
-#include <string>
-#include <iostream>
-#include <memory>
-#include <random>
-#include <list>
-
 #ifndef CREATURE_H
 #define CREATURE_H
 
-#include "GameObject.h"
-
 struct Vector2D;
 
-class Map;
-class Simulation;
-class Creature;
-class Food;
 class GameObject;
-class GameObjectBuilder;
+
 
 class Creature : public GameObject
 {
 public:
-	Creature(Simulation * simulation, int hungerSpeedIncrement);
+	Creature(Simulation * simulation, int hungerSpeedIncrement); //initialse hunger = 0 à la creation
 
-	void update();
+	void update(); // verifie si il est detruit, move, meurs si hunger > 100 sinon augmente, cherche nourritur à manger, cherche creature avec se reproduire
 
-	char getImage();
+	char getImage(); // image C
 
 private:
 
-	int hungerPourcent;
-	int hungerSpeedIncrement;
+	int hungerPourcent; // pourcentage de fin
+	int hungerSpeedIncrement; // pourcentage d'augmentation par jour
 
 	//Return position. If food is not find, we return the value (-1,-1)
-	Vector2D findnearbyFoodPosition();
+	Vector2D findnearbyFoodPosition(); // trouve de la nourriture autour gameObject
 
 	//Return position. If creature is not find, we return the value (-1,-1)
-	Vector2D findnearbyCreaturePosition();
+	Vector2D findnearbyCreaturePosition(); // trouve une creature autour gameObject
 
 	//Return null position. If any null position is found, we return the value (-1,-1)
-	Vector2D findNullPosition();
+	Vector2D findNullPosition(); // trouve une place vide autour gameObject INUTILISEE
 
-	bool gameObjectNotParent(GameObject * gameObject);
+	bool gameObjectNotParent(GameObject * gameObject); // verifie si la creature à deja eu un oeuf ce tour
 
-	void randomMove();
+	void randomMove(); // mouvement choisis aléatoirement
 	
-	void die();
+	void die(); // déclare la créture à detruire
 
-	void incrementHunger();
+	void incrementHunger(); // augmente le pourcentage de faim
 
 };
 

@@ -1,25 +1,18 @@
 
 #include <array>
-#include <string>
-#include <iostream>
 #include <memory>
-#include <random>
 #include <list>
 
 #ifndef MAP_H
 #define MAP_H
 
 #include "Constant.h"
-#include "Vector2D.h"
 
 struct Vector2D;
 
-class Map;
 class Simulation;
 class Creature;
-class Food;
 class GameObject;
-class GameObjectBuilder;
 
 class Map {
 public:
@@ -29,19 +22,20 @@ public:
 
 	bool AddGameObjectAt(std::shared_ptr<GameObject> gameObject, int positionX, int positionY); //Mets le gameobject dans la map et dans la liste des gameObjects (gameObjectForUpdate)
 
-	GameObject & getContentAtPosition(Vector2D position);
+	GameObject & getContentAtPosition(Vector2D position); // reupere l'adresse du gameobject à la position
 
-	bool RemoveObjectAt(Vector2D position, Simulation * simulation);
+	bool RemoveObjectAt(Vector2D position, Simulation * simulation); // crée un enfant à partir d'u oeuf et detruit le gameobject à position
 
-	bool MoveCreatureTo(Creature & gameObject, int positionX, int positionY);
+	bool MoveCreatureTo(Creature & gameObject, int positionX, int positionY); // deplace creature en positionX et positionY
 	
-	void update(Simulation & simulation);
+	void update(Simulation & simulation); // update chaque gameobject de gameobjectforupdate
 
-	void DisplayMap();
+	void DisplayMap(); // affiche la map
 
-	int countCreaturesInMap();
+	int countCreaturesInMap(); // compte le nombre de creature sur la carte
 
-	template<typename T> bool gameObjectOfTypeExistAt(Vector2D position) {
+	template<typename T> bool gameObjectOfTypeExistAt(Vector2D position) // verifie si l'objet de class template existe à la position
+	{
 		if (map[position.x][position.y] == nullptr) {
 			return false;
 		}
@@ -49,12 +43,13 @@ public:
 		return gameObject != nullptr;
 	}
 
-	bool gameObjectExistAt(Vector2D position);
+	bool gameObjectExistAt(Vector2D position); // verifie si un game object existe à la position
 
 private:
 
 	std::array<std::array<std::shared_ptr<GameObject>, MAP_SIZE>, MAP_SIZE> map;
-	std::list<std::shared_ptr<GameObject>> gameObjectsForUpdate;
+
+	std::list<std::shared_ptr<GameObject>> gameObjectsForUpdate; // objet à update
 
 };
 #endif

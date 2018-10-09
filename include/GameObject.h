@@ -1,11 +1,4 @@
 
-#include <array>
-#include <string>
-#include <iostream>
-#include <memory>
-#include <random>
-#include <list>
-
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
@@ -13,11 +6,8 @@
 
 struct Vector2D;
 
-class Map;
 class Simulation;
-class Creature;
-class Food;
-class GameObject;
+
 
 
 class GameObject {
@@ -34,20 +24,20 @@ public:
 
 	virtual char getImage();
 
-	Vector2D getPosition();
+	Vector2D getPosition(); // renvoie position objet
 
-	void setPosition(Vector2D position);
+	void setPosition(Vector2D position); // mets la position à l'objet
 
-	bool isObjectDestroyed();
+	bool isObjectDestroyed(); // verifie si l'objet est détruit
 
-	void destroy();
+	void destroy(); // statut detruit de l'objet
 
 
 protected:
-	Vector2D position;
-	Simulation * simulation;
-	bool isDestroyed;
-	std::string debug;
+	Vector2D position; //position de l'objet
+	Simulation * simulation; // simulation, controle le jeu
+	bool isDestroyed; // statut de l'objet
+	
 
 };
 

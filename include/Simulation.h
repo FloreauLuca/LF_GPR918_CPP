@@ -1,24 +1,13 @@
 
-#include <array>
-#include <string>
-#include <iostream>
-#include <memory>
 #include <random>
-#include <list>
 
 #ifndef SIMULATION_H
 #define SIMULATION_H
 
-#include "Vector2D.h"
-
 struct Vector2D;
 
 class Map;
-class Simulation;
-class Creature;
-class Food;
 class GameObject;
-class GameObjectBuilder;
 
 class Simulation {
 public:
@@ -26,25 +15,21 @@ public:
 	
 	Simulation(int seed);
 
-	void init(); 
+	void init();  //initialise (creation 5 creature, 6 food)
 
-	void star();
+	void star(); // demarrage, check fin update, display, parent ce tour null
 
-	int getValueRandom(int min, int max);
+	int getValueRandom(int min, int max); // random entre min et max
 
-	std::vector<GameObject*> parent;
+	std::vector<GameObject*> parentThisTurn; // list des parents aillant eu un oeuf ce tour
 
 private:
 
-	int nbrCreatures;
-	int nbrHunters;
-	int nbrFoodStuff;
-
 	std::default_random_engine random;
 
-	void update();
+	void update(); // map update
 
-	bool isEndSimulation();
+	bool isEndSimulation(); // verifie si c'est la fin (0 creature)
 	
 };
 

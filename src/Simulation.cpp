@@ -4,7 +4,6 @@
 #include <iostream>
 #include <memory>
 #include <random>
-#include <list>
 
 #include"GameObjectBuilder.h"
 #include "Map.h"
@@ -12,14 +11,10 @@
 #include "Food.h"
 #include "GameObject.h"
 #include "Simulation.h"
-#include "Vector2D.h"
-#include "Egg.h"
+#include "Constant.h"
 
-struct Vector2D;
 class Map;
 class Simulation;
-class Creature;
-class Food;
 class GameObject;
 class GameObjectBuilder;
 
@@ -29,12 +24,12 @@ Simulation::Simulation(int seed) :random(seed) {
 
 void Simulation::init() {
 	//Create 5 creatures
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < NB_CREATURE; i++) {
 		map.AddGameObjectAt(std::shared_ptr<GameObject>(std::static_pointer_cast<GameObject>((GameObjectBuilder::buildCreature(*this)))));
 	}
 
 	//Create 6 foods 
-	for (int i = 0; i < 6; i++) {
+	for (int i = 0; i < NB_FOOD; i++) {
 		map.AddGameObjectAt(std::shared_ptr<GameObject>(std::static_pointer_cast<GameObject>((GameObjectBuilder::buildFood(*this)))));
 	}
 	map.DisplayMap();
@@ -45,7 +40,7 @@ void Simulation::star() {
 	{
 		update();
 		map.DisplayMap();
-		parent.clear();
+		parentThisTurn.clear();
 	}
 	std::cout << std::endl << "------ END OF SIMULATION -------------" << std::endl;
 	system("Pause");
