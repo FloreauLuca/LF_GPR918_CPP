@@ -32,7 +32,6 @@ void Simulation::init() {
 	for (int i = 0; i < NB_FOOD; i++) {
 		map.AddGameObjectAt(std::shared_ptr<GameObject>(std::static_pointer_cast<GameObject>((GameObjectBuilder::buildFood(*this)))));
 	}
-	map.DisplayMap();
 }
 
 void Simulation::star() {
