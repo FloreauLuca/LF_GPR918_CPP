@@ -101,8 +101,8 @@ int main()
         sf::Event event{};
 		while (window.pollEvent(event))
 		{
-			std::cout << "y " << spriteTest.getPosition().y << std::endl;
-			std::cout << "x " << spriteTest.getPosition().x << std::endl;
+			//std::cout << "y " << spriteTest.getPosition().y << std::endl;
+			//std::cout << "x " << spriteTest.getPosition().x << std::endl;
 			// "close requested" event: we close the window
 			
 			if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Left)))

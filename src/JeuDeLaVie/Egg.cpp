@@ -1,8 +1,8 @@
 
-#include "Map.h"
-#include "GameObject.h"
-#include "Simulation.h"
-#include "Egg.h"
+#include "JeuDeLaVie/Map.h"
+#include "JeuDeLaVie/GameObject.h"
+#include "JeuDeLaVie/Simulation.h"
+#include "JeuDeLaVie/Egg.h"
 
 struct Vector2D;
 

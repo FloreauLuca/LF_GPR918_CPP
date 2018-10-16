@@ -6,12 +6,12 @@
 #include <list>
 #include <typeinfo>
 
-#include"GameObjectBuilder.h"
-#include "Map.h"
-#include "Creature.h"
-#include "GameObject.h"
-#include "Simulation.h"
-#include "Vector2D.h"
+#include "JeuDeLaVie/GameObjectBuilder.h"
+#include "JeuDeLaVie/Map.h"
+#include "JeuDeLaVie/Creature.h"
+#include "JeuDeLaVie/GameObject.h"
+#include "JeuDeLaVie/Simulation.h"
+#include "JeuDeLaVie/Vector2D.h"
 
 struct Vector2D;
 class Map;
@@ -36,14 +36,14 @@ bool Map::AddGameObjectAt(std::shared_ptr<GameObject> gameObject, int positionX,
 	std::shared_ptr<GameObject> mapPosition = map[positionX][positionY];  // s'adapte à la map
 	if (mapPosition == nullptr) {
 
-		map[positionX][positionY] = std::static_pointer_cast<GameObject>(gameObject);
+		map[positionX][positionY] = std::dynamic_pointer_cast<GameObject>(gameObject);
 
 		//std::cout << "gameObject : " << typeid(gameObject).name() << std::endl;
 		//std::cout << "gameObject* : " << typeid(*gameObject).name() << std::endl;
 		//std::cout << "map : " << typeid(map[positionX][positionY]).name() << std::endl;
 		//std::cout << "map* : " << typeid(*map[positionX][positionY]).name() << std::endl;
 
-		gameObjectsForUpdate.push_back(std::static_pointer_cast<GameObject>(gameObject));
+		gameObjectsForUpdate.push_back(std::dynamic_pointer_cast<GameObject>(gameObject));
 		return true;
 	}
 	return false;

@@ -1,15 +1,15 @@
 
 #include <memory>
 
-#include"GameObjectBuilder.h"
-#include "Map.h"
-#include "Creature.h"
-#include "Food.h"
-#include "GameObject.h"
-#include "Simulation.h"
-#include "Vector2D.h"
-#include "Egg.h"
-#include "Constant.h"
+#include "JeuDeLaVie/GameObjectBuilder.h"
+#include "JeuDeLaVie/Map.h"
+#include "JeuDeLaVie/Creature.h"
+#include "JeuDeLaVie/Food.h"
+#include "JeuDeLaVie/GameObject.h"
+#include "JeuDeLaVie/Simulation.h"
+#include "JeuDeLaVie/Vector2D.h"
+#include "JeuDeLaVie/Egg.h"
+#include "JeuDeLaVie/Constant.h"
 
 struct Vector2D;
 
