@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include <list>
-#include "Characters.h"
+#include "DebugBlancEx3/Characters.h"
 
 class Hero;
 class Monster;

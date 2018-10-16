@@ -6,9 +6,14 @@
 #include <iostream>
 #include  <cmath>
 #include <list>
+#include <random>
+#include <chrono>
+
 class Obstacle;
 
 std::list<Obstacle> listObstacle;
+std::default_random_engine random(std::chrono::system_clock::now().time_since_epoch().count());
+std::uniform_int_distribution<int> distribution(0, 255);
 
 enum class Color {
 	WHITE,
@@ -22,8 +27,20 @@ enum class AnimPerso {
 	PERSOFACE2,
 	PERSOBACK1,
 	PERSOBACK2,
+	PERSORIGHT1,
+	PERSORIGHT2,
+	PERSOLEFT1,
+	PERSOLEFT2,
 };
 
+
+int getValueRandom(int min, int max) {
+	
+	int randomValue = distribution(random);
+
+
+	return randomValue;
+}
 
 
 class Obstacle
@@ -31,11 +48,13 @@ class Obstacle
 public:
 	sf::FloatRect boundingBox;
 	sf::RectangleShape obstacle;
+	sf::Color color;
 	Obstacle(int xstart, int ystart, int xend,int yend)
 	{
 		
+		color = sf::Color(getValueRandom(0, 255), getValueRandom(0, 255), getValueRandom(0, 255));
 		
-		obstacle.setFillColor(sf::Color(255, 0, 100));
+		obstacle.setFillColor(color);
 		obstacle.setPosition(xstart, ystart);
 		obstacle.setSize(sf::Vector2f(abs(xstart-xend), abs(ystart - yend)));
 		boundingBox = obstacle.getGlobalBounds();
@@ -44,23 +63,21 @@ public:
 
 private:
 	
-
-
+	
 
 };
 
-bool isCollisionWithObstacle (sf::FloatRect playerHitBox)
+Obstacle * isCollisionWithObstacle (sf::FloatRect playerHitBox)
 {
 	for (auto & obstacle : listObstacle)
 	{
 		if (playerHitBox.intersects(obstacle.boundingBox))
 		{
-			return true;
+			return &obstacle;
 		}
 	}
-	return false;
+	return nullptr;
 }
-
 
 
 int main()
@@ -71,12 +88,18 @@ int main()
 	sf::Texture texturePersoFace2;
 	sf::Texture texturePersoBack1;
 	sf::Texture texturePersoBack2;
+	sf::Texture texturePersoRight1;
+	sf::Texture texturePersoRight2;
+	sf::Texture texturePersoLeft1;
+	sf::Texture texturePersoLeft2;
+	
+	std::default_random_engine random;
 
-
-	if ((!texturePersoFace1.loadFromFile("data/PersoFace1.png")) || (!texturePersoFace2.loadFromFile("data/PersoFace2.png")) || (!texturePersoBack1.loadFromFile("data/PersoBack1.png")) || (!texturePersoBack2.loadFromFile("data/PersoBack2.png")))
+	if ((!texturePersoFace1.loadFromFile("data/PersoFace1.png")) || (!texturePersoFace2.loadFromFile("data/PersoFace2.png")) || (!texturePersoBack1.loadFromFile("data/PersoBack1.png")) || (!texturePersoBack2.loadFromFile("data/PersoBack2.png")) || (!texturePersoRight1.loadFromFile("data/PersoRight1.png")) || (!texturePersoRight2.loadFromFile("data/PersoRight2.png")) || (!texturePersoLeft1.loadFromFile("data/PersoLeft1.png")) || (!texturePersoLeft2.loadFromFile("data/PersoLeft2.png")))
 	{
 		return EXIT_FAILURE;
 	}
+	
 	spriteTest.setTexture(texturePersoFace1);
 	spriteTest.scale(5, 5);
 	Obstacle block = Obstacle(100, 100, 200, 200);
@@ -89,6 +112,13 @@ int main()
 	listObstacle.push_back(borderRight);
 	Obstacle borderLeft = Obstacle(500, 0, 510, 500);
 	listObstacle.push_back(borderLeft);
+
+	Obstacle block2 = Obstacle(200, 100, 300, 200);
+	listObstacle.push_back(block2);
+	Obstacle block3 = Obstacle(400, 100, 500, 200);
+	listObstacle.push_back(block3);
+	Obstacle block4 = Obstacle(200, 400, 300, 500);
+	listObstacle.push_back(block4);
 
 	sf::FloatRect playerHitBox = spriteTest.getGlobalBounds();
 	Color currentColor = Color::WHITE;
@@ -115,18 +145,25 @@ int main()
 				}
 				switch (currentAnim)
 				{
-				case AnimPerso::PERSOFACE1:
+				case AnimPerso::PERSOLEFT1:
 				{
-					currentAnim = AnimPerso::PERSOFACE2;
-					spriteTest.setTexture(texturePersoFace2);
+					currentAnim = AnimPerso::PERSOLEFT2;
+					spriteTest.setTexture(texturePersoLeft2);
 					break;
 				}
-				case AnimPerso::PERSOFACE2:
+				case AnimPerso::PERSOLEFT2:
 				{
-					currentAnim = AnimPerso::PERSOFACE1;
-					spriteTest.setTexture(texturePersoFace1);
+					currentAnim = AnimPerso::PERSOLEFT1;
+					spriteTest.setTexture(texturePersoLeft1);
 					break;
 				}
+				default:
+				{
+					currentAnim = AnimPerso::PERSOLEFT1;
+					spriteTest.setTexture(texturePersoLeft1);
+					break;
+				}
+				
 				}
 			}
 			if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Right)))
@@ -139,18 +176,25 @@ int main()
 				}
 				switch (currentAnim)
 				{
-				case AnimPerso::PERSOFACE1:
+				case AnimPerso::PERSORIGHT1:
 				{
-					currentAnim = AnimPerso::PERSOFACE2;
-					spriteTest.setTexture(texturePersoFace2);
+					currentAnim = AnimPerso::PERSORIGHT2;
+					spriteTest.setTexture(texturePersoRight2);
 					break;
 				}
-				case AnimPerso::PERSOFACE2:
+				case AnimPerso::PERSORIGHT2:
 				{
-					currentAnim = AnimPerso::PERSOFACE1;
-					spriteTest.setTexture(texturePersoFace1);
+					currentAnim = AnimPerso::PERSORIGHT1;
+					spriteTest.setTexture(texturePersoRight1);
 					break;
 				}
+				default:
+				{
+					currentAnim = AnimPerso::PERSORIGHT1;
+					spriteTest.setTexture(texturePersoRight1);
+					break;
+				}
+				
 				}
 			}
 			if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Down)))
@@ -217,9 +261,9 @@ int main()
 
 
 			
-			if (isCollisionWithObstacle(playerHitBox))
+			if (isCollisionWithObstacle(playerHitBox) != nullptr)
 			{
-				spriteTest.setColor(sf::Color(255, 0, 100));
+				spriteTest.setColor(isCollisionWithObstacle(playerHitBox)->color);
 			}
 
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
@@ -267,7 +311,7 @@ int main()
 			}
 		}
 		/*
-		if (!(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)))
+		sf::Keyboard::isKeyPressed(sf::Keyboard::Up)))
 		{
 			spriteTest.move(sf::Vector2f(0, 2));
 			playerHitBox = spriteTest.getGlobalBounds();
