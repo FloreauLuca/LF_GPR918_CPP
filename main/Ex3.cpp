@@ -30,7 +30,7 @@ int main()
         }
         //Windows specific
         if(!hero->isAlive())
-{
+		{
             hero->death();
             break;
         }

@@ -16,7 +16,7 @@ public:
 	Character(int, int, int, int);
 	void takeDamage(int damage);
 	bool isAlive();
-	virtual void death();
+	virtual void death() = 0;
 	int getAttack();
 	int getHealth();
 	int getDefense();

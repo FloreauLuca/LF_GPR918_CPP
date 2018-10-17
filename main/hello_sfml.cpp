@@ -82,8 +82,15 @@ Obstacle * isCollisionWithObstacle (sf::FloatRect playerHitBox)
 
 int main()
 {
+
     sf::RenderWindow window(sf::VideoMode(500, 500), "WT Window");
+
+	window.setFramerateLimit(60u);
+	sf::Clock clock;
+	sf::Vector2f velocity = sf::Vector2f(100.0f, 100.0f);
+
 	sf::Sprite spriteTest;
+	sf::Sprite spriteTest2;
 	sf::Texture texturePersoFace1;
 	sf::Texture texturePersoFace2;
 	sf::Texture texturePersoBack1;
@@ -92,15 +99,17 @@ int main()
 	sf::Texture texturePersoRight2;
 	sf::Texture texturePersoLeft1;
 	sf::Texture texturePersoLeft2;
-	
+	sf::Texture texturePersoBaron;
+	sf::Texture currentTexture;
 	std::default_random_engine random;
 
-	if ((!texturePersoFace1.loadFromFile("data/PersoFace1.png")) || (!texturePersoFace2.loadFromFile("data/PersoFace2.png")) || (!texturePersoBack1.loadFromFile("data/PersoBack1.png")) || (!texturePersoBack2.loadFromFile("data/PersoBack2.png")) || (!texturePersoRight1.loadFromFile("data/PersoRight1.png")) || (!texturePersoRight2.loadFromFile("data/PersoRight2.png")) || (!texturePersoLeft1.loadFromFile("data/PersoLeft1.png")) || (!texturePersoLeft2.loadFromFile("data/PersoLeft2.png")))
+	if ((!texturePersoFace1.loadFromFile("data/PersoFace1.png")) || (!texturePersoFace2.loadFromFile("data/PersoFace2.png")) || (!texturePersoBack1.loadFromFile("data/PersoBack1.png")) || (!texturePersoBack2.loadFromFile("data/PersoBack2.png")) || (!texturePersoRight1.loadFromFile("data/PersoRight1.png")) || (!texturePersoRight2.loadFromFile("data/PersoRight2.png")) || (!texturePersoLeft1.loadFromFile("data/PersoLeft1.png")) || (!texturePersoLeft2.loadFromFile("data/PersoLeft2.png")) || (!texturePersoBaron.loadFromFile("data/Baron.png")))
 	{
 		return EXIT_FAILURE;
 	}
 	
 	spriteTest.setTexture(texturePersoFace1);
+	currentTexture = texturePersoFace1;
 	spriteTest.scale(5, 5);
 	Obstacle block = Obstacle(100, 100, 200, 200);
 	listObstacle.push_back(block);
@@ -128,6 +137,7 @@ int main()
     while (window.isOpen())
     {
         // check all the window's events that were triggered since the last iteration of the loop
+		sf::Time dt = clock.restart();
         sf::Event event{};
 		while (window.pollEvent(event))
 		{
@@ -148,19 +158,19 @@ int main()
 				case AnimPerso::PERSOLEFT1:
 				{
 					currentAnim = AnimPerso::PERSOLEFT2;
-					spriteTest.setTexture(texturePersoLeft2);
+					currentTexture = texturePersoLeft2;
 					break;
 				}
 				case AnimPerso::PERSOLEFT2:
 				{
 					currentAnim = AnimPerso::PERSOLEFT1;
-					spriteTest.setTexture(texturePersoLeft1);
+					currentTexture = texturePersoLeft1;
 					break;
 				}
 				default:
 				{
 					currentAnim = AnimPerso::PERSOLEFT1;
-					spriteTest.setTexture(texturePersoLeft1);
+					currentTexture = texturePersoLeft1;
 					break;
 				}
 				
@@ -179,19 +189,19 @@ int main()
 				case AnimPerso::PERSORIGHT1:
 				{
 					currentAnim = AnimPerso::PERSORIGHT2;
-					spriteTest.setTexture(texturePersoRight2);
+					currentTexture = texturePersoRight2;
 					break;
 				}
 				case AnimPerso::PERSORIGHT2:
 				{
 					currentAnim = AnimPerso::PERSORIGHT1;
-					spriteTest.setTexture(texturePersoRight1);
+					currentTexture = texturePersoRight1;
 					break;
 				}
 				default:
 				{
 					currentAnim = AnimPerso::PERSORIGHT1;
-					spriteTest.setTexture(texturePersoRight1);
+					currentTexture = texturePersoRight1;
 					break;
 				}
 				
@@ -210,19 +220,19 @@ int main()
 				case AnimPerso::PERSOFACE1:
 				{
 					currentAnim = AnimPerso::PERSOFACE2;
-					spriteTest.setTexture(texturePersoFace2);
+					currentTexture = texturePersoFace2;
 					break;
 				}
 				case AnimPerso::PERSOFACE2:
 				{
 					currentAnim = AnimPerso::PERSOFACE1;
-					spriteTest.setTexture(texturePersoFace1);
+					currentTexture = texturePersoFace1;
 					break;
 				}
 				default:
 					{
 					currentAnim = AnimPerso::PERSOFACE1;
-					spriteTest.setTexture(texturePersoFace1);
+					currentTexture = texturePersoFace1;
 					break;
 					}
 				}
@@ -240,19 +250,19 @@ int main()
 				case AnimPerso::PERSOBACK1:
 				{
 					currentAnim = AnimPerso::PERSOBACK2;
-					spriteTest.setTexture(texturePersoBack2);
+					currentTexture = texturePersoBack2;
 					break;
 				}
 				case AnimPerso::PERSOBACK2:
 				{
 					currentAnim = AnimPerso::PERSOBACK1;
-					spriteTest.setTexture(texturePersoBack1);
+					currentTexture = texturePersoBack1;
 					break;
 				}
 				default :
 					{
 					currentAnim = AnimPerso::PERSOBACK1;
-					spriteTest.setTexture(texturePersoBack1);
+					currentTexture = texturePersoBack1;
 					break;
 					}
 				}
@@ -268,7 +278,7 @@ int main()
 
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 			{
-				switch (currentColor)
+				/*switch (currentColor)
 				{
 				case Color::WHITE:
 				{
@@ -300,7 +310,9 @@ int main()
 					spriteTest.setColor(sf::Color(0, 0, 0));
 					break;
 				}
-				}
+				}*/
+				currentTexture = texturePersoBaron;
+				
 			}
 
 			
@@ -310,6 +322,9 @@ int main()
 				window.close();
 			}
 		}
+
+		//spriteTest.setPosition(spriteTest.getPosition() + velocity * dt.asSeconds());
+
 		/*
 		sf::Keyboard::isKeyPressed(sf::Keyboard::Up)))
 		{
@@ -321,7 +336,9 @@ int main()
 			}
 		}
 		*/
-
+		spriteTest.setTextureRect(sf::IntRect(0, 0, currentTexture.getSize().x, currentTexture.getSize().y));
+		spriteTest.setScale(10, 10);
+		spriteTest.setTexture(currentTexture);
 		window.clear(sf::Color::Blue);
 		window.draw(spriteTest);
 		for (auto & obstacle : listObstacle)
