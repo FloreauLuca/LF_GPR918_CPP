@@ -136,6 +136,7 @@ int main()
     // run the program as long as the window is open
     while (window.isOpen())
     {
+		sf::Time dt = clock.restart();
         // check all the window's events that were triggered since the last iteration of the loop
 		sf::Time dt = clock.restart();
         sf::Event event{};
