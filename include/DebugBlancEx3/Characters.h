@@ -32,19 +32,19 @@ class Hero;
 class Monster : public Character
 {
 public:
-    Monster(int,int,int,int);
-    //void takeDamage(int damage);
+	using Character::Character;
     void fight(Hero*);
-    void death();
+	void death();
 };
 
 class Hero : public Character
 {
 public:
-    Hero(int,int,int,int);
-	//void takeDamage(int damage);
+	Hero(int health, int attack, int defense, int strength);
     void fight(Monster*);
     void death();
+	void levelup();
+	void save();
 };
 
 

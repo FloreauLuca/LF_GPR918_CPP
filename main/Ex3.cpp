@@ -14,28 +14,26 @@ class Monster;
 
 int main()
 {
-    std::unique_ptr<Hero> hero = std::make_unique<Hero>(10, 10, 10, 10);
+    Hero hero(10, 10, 10, 10);
     std::list<Monster> monsters = {Monster(10, 1,1,5), Monster(20,5, 5, 5), Monster(30, 10,10,5)};
     
-    for(std::list<Monster>::iterator monsterIt = monsters.begin(); monsterIt != monsters.end(); monsterIt++)
+    for(auto & monsterIt : monsters)
     {
-        while (hero->isAlive() && monsterIt->isAlive())
+        while (hero.isAlive() && monsterIt.isAlive())
         {
-            hero->fight(&(*monsterIt));
-            monsterIt->fight(hero.get());
+            hero.fight(&monsterIt);
+            monsterIt.fight(&hero);
         }
-        //If the monster is dead, meaning not alive, he dies!
-        if(!monsterIt->isAlive()){
-            monsterIt->death();
+        if(!monsterIt.isAlive()){
+            monsterIt.death();
         }
-        //Windows specific
-        if(!hero->isAlive())
+        if(!hero.isAlive())
 		{
-            hero->death();
+            hero.death();
             break;
         }
     }
-    
+	hero.save();
     system("Pause");
     return 0;
 }

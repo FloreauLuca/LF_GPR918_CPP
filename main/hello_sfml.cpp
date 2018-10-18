@@ -9,11 +9,9 @@
 #include <random>
 #include <chrono>
 
-class Obstacle;
+std::default_random_engine seed(std::chrono::system_clock::now().time_since_epoch().count());
 
-std::list<Obstacle> listObstacle;
-std::default_random_engine random(std::chrono::system_clock::now().time_since_epoch().count());
-std::uniform_int_distribution<int> distribution(0, 255);
+
 
 enum class Color {
 	WHITE,
@@ -35,10 +33,8 @@ enum class AnimPerso {
 
 
 int getValueRandom(int min, int max) {
-	
-	int randomValue = distribution(random);
-
-
+	std::uniform_int_distribution<int> distribution(min, max);
+	int randomValue = distribution(seed);
 	return randomValue;
 }
 
@@ -67,7 +63,7 @@ private:
 
 };
 
-Obstacle * isCollisionWithObstacle (sf::FloatRect playerHitBox)
+Obstacle * isCollisionWithObstacle (sf::FloatRect playerHitBox, std::list<Obstacle> & listObstacle)
 {
 	for (auto & obstacle : listObstacle)
 	{
@@ -82,12 +78,15 @@ Obstacle * isCollisionWithObstacle (sf::FloatRect playerHitBox)
 
 int main()
 {
+	std::list<Obstacle> listObstacle;
+	
+	std::uniform_int_distribution<int> distribution(0, 255);
 
-    sf::RenderWindow window(sf::VideoMode(500, 500), "WT Window");
+    sf::RenderWindow window(sf::VideoMode(1820,920), "WT Window");
 
 	window.setFramerateLimit(60u);
 	sf::Clock clock;
-	sf::Vector2f velocity = sf::Vector2f(100.0f, 100.0f);
+	sf::Vector2f velocity = sf::Vector2f(0.0f, 100.0f);
 
 	sf::Sprite spriteTest;
 	sf::Sprite spriteTest2;
@@ -102,7 +101,7 @@ int main()
 	sf::Texture texturePersoBaron;
 	sf::Texture currentTexture;
 	std::default_random_engine random;
-
+	
 	if ((!texturePersoFace1.loadFromFile("data/PersoFace1.png")) || (!texturePersoFace2.loadFromFile("data/PersoFace2.png")) || (!texturePersoBack1.loadFromFile("data/PersoBack1.png")) || (!texturePersoBack2.loadFromFile("data/PersoBack2.png")) || (!texturePersoRight1.loadFromFile("data/PersoRight1.png")) || (!texturePersoRight2.loadFromFile("data/PersoRight2.png")) || (!texturePersoLeft1.loadFromFile("data/PersoLeft1.png")) || (!texturePersoLeft2.loadFromFile("data/PersoLeft2.png")) || (!texturePersoBaron.loadFromFile("data/Baron.png")))
 	{
 		return EXIT_FAILURE;
@@ -110,16 +109,16 @@ int main()
 	
 	spriteTest.setTexture(texturePersoFace1);
 	currentTexture = texturePersoFace1;
-	spriteTest.scale(5, 5);
+	spriteTest.setScale(5,5);
 	Obstacle block = Obstacle(100, 100, 200, 200);
 	listObstacle.push_back(block);
-	Obstacle borderUp = Obstacle(0, -10, 500, 0);
+	Obstacle borderUp = Obstacle(0, -10, window.getSize().x, 0);
 	listObstacle.push_back(borderUp);
-	Obstacle borderDown = Obstacle(0, 500, 500, 510);
+	Obstacle borderDown = Obstacle(0, window.getSize().y, window.getSize().x, window.getSize().y-10);
 	listObstacle.push_back(borderDown);
-	Obstacle borderRight = Obstacle(-10, 0, 0, 500);
+	Obstacle borderRight = Obstacle(window.getSize().x, 0, window.getSize().x+10, window.getSize().y);
 	listObstacle.push_back(borderRight);
-	Obstacle borderLeft = Obstacle(500, 0, 510, 500);
+	Obstacle borderLeft = Obstacle(-10, 0, -20, window.getSize().y);
 	listObstacle.push_back(borderLeft);
 
 	Obstacle block2 = Obstacle(200, 100, 300, 200);
@@ -133,6 +132,7 @@ int main()
 	Color currentColor = Color::WHITE;
 	AnimPerso currentAnim = AnimPerso::PERSOFACE1;
 
+	sf::Vector2f direction(0, 0);
     // run the program as long as the window is open
     while (window.isOpen())
     {
@@ -141,18 +141,31 @@ int main()
         sf::Event event{};
 		while (window.pollEvent(event))
 		{
-			//std::cout << "y " << spriteTest.getPosition().y << std::endl;
-			//std::cout << "x " << spriteTest.getPosition().x << std::endl;
+			//std::cout << "y " << window.getSize().y << std::endl;
+			//std::cout << "x " << window.getSize().x << std::endl;
 			// "close requested" event: we close the window
 			
 			if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Left)))
 			{
-				spriteTest.move(sf::Vector2f(-10, 0));
-				playerHitBox = spriteTest.getGlobalBounds();
-				if (isCollisionWithObstacle(playerHitBox))
-				{
-					spriteTest.move(sf::Vector2f(10, 0));
-				}
+				direction = sf::Vector2f(-10, 0);	
+			} else if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Right)))
+			{
+				direction = sf::Vector2f(10, 0);
+			} else if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Down)))
+			{
+				direction = sf::Vector2f(0, 10);
+			} else if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Up)))
+			{
+				direction = sf::Vector2f(0, -10);
+			}
+
+			if (event.type == sf::Event::KeyReleased)
+			{
+				direction = sf::Vector2f(0, 0);
+			}
+
+			if (direction == sf::Vector2f(-10, 0))
+			{
 				switch (currentAnim)
 				{
 				case AnimPerso::PERSOLEFT1:
@@ -173,17 +186,9 @@ int main()
 					currentTexture = texturePersoLeft1;
 					break;
 				}
-				
 				}
-			}
-			if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Right)))
+			} else if (direction == sf::Vector2f(10, 0))
 			{
-				spriteTest.move(sf::Vector2f(10, 0));
-				playerHitBox = spriteTest.getGlobalBounds();
-				if (isCollisionWithObstacle(playerHitBox))
-				{
-					spriteTest.move(sf::Vector2f(-10, 0));
-				}
 				switch (currentAnim)
 				{
 				case AnimPerso::PERSORIGHT1:
@@ -204,17 +209,9 @@ int main()
 					currentTexture = texturePersoRight1;
 					break;
 				}
-				
 				}
-			}
-			if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Down)))
+			} else if (direction == sf::Vector2f(0, 10))
 			{
-				spriteTest.move(sf::Vector2f(0, 10));
-				playerHitBox = spriteTest.getGlobalBounds();
-				if (isCollisionWithObstacle(playerHitBox))
-				{
-					spriteTest.move(sf::Vector2f(0, -10));
-				}
 				switch (currentAnim)
 				{
 				case AnimPerso::PERSOFACE1:
@@ -230,21 +227,14 @@ int main()
 					break;
 				}
 				default:
-					{
+				{
 					currentAnim = AnimPerso::PERSOFACE1;
 					currentTexture = texturePersoFace1;
 					break;
-					}
 				}
-			}
-			if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Up)))
+				}
+			} else if (direction == sf::Vector2f(0, -10))
 			{
-				spriteTest.move(sf::Vector2f(0, -10));
-				playerHitBox = spriteTest.getGlobalBounds();
-				if (isCollisionWithObstacle(playerHitBox))
-				{
-					spriteTest.move(sf::Vector2f(0, 10));
-				}
 				switch (currentAnim)
 				{
 				case AnimPerso::PERSOBACK1:
@@ -259,26 +249,25 @@ int main()
 					currentTexture = texturePersoBack1;
 					break;
 				}
-				default :
-					{
+				default:
+				{
 					currentAnim = AnimPerso::PERSOBACK1;
 					currentTexture = texturePersoBack1;
 					break;
-					}
+				}
 				}
 			}
 
 
-
 			
-			if (isCollisionWithObstacle(playerHitBox) != nullptr)
+			if (isCollisionWithObstacle(playerHitBox, listObstacle) != nullptr)
 			{
-				spriteTest.setColor(isCollisionWithObstacle(playerHitBox)->color);
+				spriteTest.setColor(isCollisionWithObstacle(playerHitBox, listObstacle)->color);
 			}
 
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 			{
-				/*switch (currentColor)
+				switch (currentColor)
 				{
 				case Color::WHITE:
 				{
@@ -310,36 +299,32 @@ int main()
 					spriteTest.setColor(sf::Color(0, 0, 0));
 					break;
 				}
-				}*/
-				currentTexture = texturePersoBaron;
+				}
+				//currentTexture = texturePersoBaron;
 				
 			}
-
-			
-
 			if (event.type == sf::Event::Closed)
 			{
 				window.close();
 			}
 		}
-
-		//spriteTest.setPosition(spriteTest.getPosition() + velocity * dt.asSeconds());
-
-		/*
-		sf::Keyboard::isKeyPressed(sf::Keyboard::Up)))
+		spriteTest.move(direction);
+		playerHitBox = spriteTest.getGlobalBounds();
+		if (isCollisionWithObstacle(playerHitBox, listObstacle))
 		{
-			spriteTest.move(sf::Vector2f(0, 2));
-			playerHitBox = spriteTest.getGlobalBounds();
-			if (isCollisionWithObstacle(playerHitBox))
-			{
-				spriteTest.move(sf::Vector2f(0, -2));
-			}
+			spriteTest.move(-direction);
 		}
-		*/
+		/*spriteTest.setPosition(spriteTest.getPosition() + velocity * dt.asSeconds());
+		playerHitBox = spriteTest.getGlobalBounds();
+		if (isCollisionWithObstacle(playerHitBox))
+		{
+			spriteTest.setPosition(spriteTest.getPosition() + velocity * dt.asSeconds() *(-1.0f));
+		}*/
+
 		spriteTest.setTextureRect(sf::IntRect(0, 0, currentTexture.getSize().x, currentTexture.getSize().y));
-		spriteTest.setScale(10, 10);
+		spriteTest.setScale(5, 5);
 		spriteTest.setTexture(currentTexture);
-		window.clear(sf::Color::Blue);
+		window.clear(sf::Color::White);
 		window.draw(spriteTest);
 		for (auto & obstacle : listObstacle)
 		{

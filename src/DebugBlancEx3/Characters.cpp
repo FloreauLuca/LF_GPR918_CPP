@@ -8,6 +8,12 @@
 
 #include "DebugBlancEx3/Characters.h"
 
+#include <fstream>
+#include <random>
+#include "json.hpp"
+
+using json = nlohmann::json;
+
 //////////Character////////////
 class Character;
 
@@ -19,7 +25,8 @@ Character::Character(int health, int attack, int defense, int strength)
     this->strength = strength;
 }
 
-bool Character::isAlive(){
+bool Character::isAlive()
+{
 return health > 0;
 }
 
@@ -38,19 +45,12 @@ int Character::getDefense()
     return defense;
 }
 
-void Character::death()
-{
-	
-}
 
 
 //////////Monster////////////
 class Monster;
 class Hero;
-Monster::Monster(int health,int attack,int defense, int strength): Character(health,attack, defense, strength)
-{
-    
-}
+
 void Monster::fight(Hero* hero)
 {
     int damage = (double)attack/(hero->getDefense())*strength;
@@ -74,13 +74,9 @@ void Monster::death()
 
 //////////Hero////////////
 
-Hero::Hero(int health, int attack, int defense, int strength): Character(health, attack, defense, strength)
-{
-
-}
 void Hero::fight(Monster* monster)
 {
-	int damage = (double)attack/(monster->getDefense())*strength;
+	int damage = static_cast<double>(attack)/(monster->getDefense())*strength;
 	if (damage < 1)
 	{
 		damage = 1;
@@ -95,5 +91,42 @@ void Hero::fight(Monster* monster)
 }
 void Hero::death()
 {
+	
     std::cout << "The hero is dead, long live the hero!\n";
 }
+
+Hero::Hero(int health, int attack, int defense, int strength) : Character(health, attack, defense, strength)
+{
+	std::ifstream saveDataFile("data/debug_hero.json"); //RAII resources allocation is initialization
+	if(saveDataFile.is_open())
+	{
+		json saveDataJson;
+	
+			saveDataJson << saveDataFile;
+
+			this->strength = saveDataJson["strength"];
+			this->defense = saveDataJson["defense"];
+			this->attack = saveDataJson["attack"];
+		
+	}
+}
+ void Hero::levelup()
+ {
+	strength += rand() % 5;
+ 	defense += rand() % 5;
+ 	attack += rand() % 5;
+ 	
+ }
+ void Hero::save()
+ {
+	 std::ofstream saveDataFile("data/debug_hero.json");
+	 if (saveDataFile.is_open())
+	 {//RAII resources allocation is initialization
+		 json saveDataJson;
+		 saveDataJson["strength"] = strength;
+		 saveDataJson["defense"] = defense;
+		 saveDataJson["attack"] = attack;
+
+		 saveDataFile << saveDataJson.dump();
+	 }
+ }
