@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include <memory>
 
 void swap(int* a, int* b)
 {
@@ -10,10 +10,10 @@ void swap(int* a, int* b)
 
 }
 
-void print_values(int* a, int* b)
+void print_values(std::unique_ptr<int> c, int* b)
 {
     //This function shows the values and their pointer
-    std::cout << "The value a is: "<< *a << " and is contained in address: "<< a <<"\n";
+    std::cout << "The value a is: "<< *c << " and is contained in address: "<< c <<"\n";
     std::cout << "The value b is: "<< *b << " and is contained in address: "<< b <<"\n";
 }
 
@@ -21,12 +21,15 @@ int main(const char* argv, int argc)
 {
     int a = 4;
     int b = 3;
+	std::unique_ptr<int> c = std::make_unique<int>(4);
+	a = 6;
 
-    print_values(&a, &b);
+	int * q = &a;
+    print_values(std::move(c), &b);
 
     swap(&a, &b);
 
-    print_values(&a,&b);
+    print_values(std::move(c),&b);
 
     //Windows specific
     system("pause");

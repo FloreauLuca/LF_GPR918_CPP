@@ -46,6 +46,7 @@ template<typename T> bool Map::CheckObjectOfTypeExistAt(Vector2D position) {
 		return false;
 	}
 	auto * gameObject = dynamic_cast<T*>(map[position.x][position.y].get());
+
 	return gameObject != nullptr;
 }
 
