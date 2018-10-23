@@ -137,8 +137,7 @@ int main()
     while (window.isOpen())
     {
 		sf::Time dt = clock.restart();
-        // check all the window's events that were triggered since the last iteration of the loop
-		sf::Time dt = clock.restart();
+        
         sf::Event event{};
 		while (window.pollEvent(event))
 		{
@@ -268,6 +267,7 @@ int main()
 
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 			{
+				std::cout << "space" << std::endl;
 				switch (currentColor)
 				{
 				case Color::WHITE:
